@@ -123,6 +123,7 @@ class SynthesisOutputWidget:
 
         self._next_button.on_click(self._onclick_next)
         self._prev_button.on_click(self._onclick_prev)
+        self._use_as_input_button.on_click(self._onclick_use_as_input)
 
         self._index = 0
         self._solutions = []
@@ -271,11 +272,10 @@ class SynthesisOutputWidget:
             self._display_current_solution()
 
     def _onclick_use_as_input(self, _):
-
         solution = self._solutions[self._index]
         code = solution.code
         produced_output = solution.output
-        self._on_composition(code=code, output=output)
+        self._on_composition(code=code, output=produced_output)
 
 
 @attr.s(cmp=False, repr=False)

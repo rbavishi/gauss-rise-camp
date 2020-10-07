@@ -115,22 +115,22 @@ class SolverContext:
 @attr.s
 class SynthesisEngine:
     _domain: SynthesisDomain = attr.ib()
-    _config: EngineConfig = attr.ib()
+    config: EngineConfig = attr.ib()
     _deduction_engine: DeductionEngine = attr.ib()
 
     _time_start = attr.ib(init=False)
 
     def solve(self, problem: SynthesisProblem):
         queries = extract_queries(problem)
-        logger.opt(colors=True).info(f"Found <green>{sum(len(v) for v in queries.values())}</green> queries "
-                                     f"with <green>{len(queries)}</green> distinct transformations.")
+        logger.opt(colors=True).debug(f"Found <green>{sum(len(v) for v in queries.values())}</green> queries "
+                                      f"with <green>{len(queries)}</green> distinct transformations.")
 
         self._time_start = time.time()
-        for length in range(self._config.min_length, self._config.max_length + 1):
+        for length in range(self.config.min_length, self.config.max_length + 1):
             for sequence in self._deduction_engine.get_candidate_sequences(self._domain,
                                                                            problem, queries, length):
                 for skeleton, query_plans in self._deduction_engine.get_query_plans(sequence, problem, queries):
-                    logger.opt(colors=True).info(f"Trying Skeleton <blue>{skeleton}</blue>")
+                    logger.opt(colors=True).debug(f"Trying Skeleton <blue>{skeleton}</blue>")
                     for solution in self._solve_for_skeleton(problem, skeleton, query_plans):
                         yield solution
                         self._time_start = time.time()
@@ -138,7 +138,7 @@ class SynthesisEngine:
     def _solve_for_skeleton(self, problem: SynthesisProblem, skeleton: Skeleton, query_plans: QueryPlans):
         context = SolverContext.build(
             domain=self._domain,
-            config=self._config,
+            config=self.config,
             problem=problem,
             skeleton=skeleton,
             query_plans=query_plans,

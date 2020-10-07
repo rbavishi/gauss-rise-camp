@@ -42,13 +42,16 @@ def start_synthesis(inputs: List[Any], domain: str = 'pandas_lite', engine: Synt
     if engine is None and domain is None:
         raise AssertionError(f"At least one of engine and domain has to be provided to start_synthesis.")
 
+    if engine is not None:
+        domain = engine.config.name
+
+    try:
+        domain_class, domain_ui_class, session_class = DOMAIN_DICT[domain]
+
+    except KeyError:
+        raise ValueError(f"Domain {domain} not supported")
+
     if engine is None:
-        try:
-            domain_class, domain_ui_class, session_class = DOMAIN_DICT[domain]
-
-        except KeyError:
-            raise ValueError(f"Domain {domain} not supported")
-
         engine: SynthesisEngine = _get_engine(domain)
 
     output = widgets.Output()

@@ -87,9 +87,9 @@ class WaypointConstraint:
                 common_edges = plan_edges or set()
 
             else:
-                common_tags.intersection_update(plan_tags)
-                common_tagged_edges.intersection_update(plan_tagged_edges)
-                common_edges.intersection_update(plan_edges)
+                common_tags.intersection_update(plan_tags or set())
+                common_tagged_edges.intersection_update(plan_tagged_edges or set())
+                common_edges.intersection_update(plan_edges or set())
 
         nodes = {e.src for e in common_tagged_edges}
         nodes.update(e.dst for e in common_tagged_edges)

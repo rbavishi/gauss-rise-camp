@@ -247,14 +247,14 @@ class QueryPlanner:
         #  ----------------------------------------------------------------------------------------------------------  #
         #  Stage 1 : Build unit plans
         #  ----------------------------------------------------------------------------------------------------------  #
-        logger.info("Extracting meta query-plans of length 1 from individual components...")
+        logger.debug("Extracting meta query-plans of length 1 from individual components...")
         for component_name in domain.get_available_components():
             for witness_entry in witness_set.entries[component_name]:
                 q_planner._extract_unit_plans(component_name, witness_entry)
 
         #  Log some information for post-mortem analysis if necessary
         #  Total plans found.
-        logger_color.info(f"Found <green>{len(q_planner._unit_plans)}</green> unit plans in total.")
+        logger_color.debug(f"Found <green>{len(q_planner._unit_plans)}</green> unit plans in total.")
 
         #  Plans found per component.
         components_to_units: Dict[str, List[UnitMetaPlan]] = collections.defaultdict(list)
@@ -263,29 +263,30 @@ class QueryPlanner:
                 components_to_units[c].append(unit)
 
         with logutils.temporary_add(f"{config.path}/logs/query_planner/unit_plans.log",
+                                    level="TRACE",
                                     only_sink=True) as logger_:
             logger_ = logger_.opt(raw=True)
             for component_name, units in components_to_units.items():
-                logger_color.info(f"Found <green>{len(units)}</green> unit plans from "
+                logger_color.debug(f"Found <green>{len(units)}</green> unit plans from "
                                   f"<blue>{component_name}</blue>.")
-                logger_.opt(colors=True).info(f"Found <green>{len(units)}</green> unit plans from "
+                logger_.opt(colors=True).debug(f"Found <green>{len(units)}</green> unit plans from "
                                               f"<blue>{component_name}</blue>.")
                 for unit in units:
-                    logger_.debug(f"Component: {component_name}\n")
-                    logger_.debug("-----------------\n")
-                    logger_.debug("Transformation\n")
-                    logger_.debug("-----------------\n")
-                    logger_.debug(unit.transformation.to_str(domain))
-                    logger_.debug("\n-----------------\n")
-                    logger_.debug("Argument Mappings\n")
-                    logger_.debug("-----------------\n")
-                    logger_.debug(unit.component_entries[component_name].argument_mappings)
-                    logger_.debug("\n========xxx========\n\n")
+                    logger_.trace(f"Component: {component_name}\n")
+                    logger_.trace("-----------------\n")
+                    logger_.trace("Transformation\n")
+                    logger_.trace("-----------------\n")
+                    logger_.trace(unit.transformation.to_str(domain))
+                    logger_.trace("\n-----------------\n")
+                    logger_.trace("Argument Mappings\n")
+                    logger_.trace("-----------------\n")
+                    logger_.trace(unit.component_entries[component_name].argument_mappings)
+                    logger_.trace("\n========xxx========\n\n")
 
         #  ----------------------------------------------------------------------------------------------------------  #
         #  Stage 2 : Strengthen Unit Plans
         #  ----------------------------------------------------------------------------------------------------------  #
-        logger_color.info("Strengthening Unit Plans...")
+        logger_color.debug("Strengthening Unit Plans...")
         for unit_plan in debug_iter(list(q_planner._unit_plans.values()), desc='Strengthening Unit Plans'):
             query: Transformation = unit_plan.transformation
             for component_name in unit_plan.component_entries.keys():
@@ -308,7 +309,7 @@ class QueryPlanner:
 
                 unit_plan.strengthenings[component_name] = (strengthened, mapping)
 
-        logger_color.info(f"Strengthened <green>{len(q_planner._unit_plans)}</green> unit plans.")
+        logger_color.debug(f"Strengthened <green>{len(q_planner._unit_plans)}</green> unit plans.")
 
         #  ----------------------------------------------------------------------------------------------------------  #
         #  Stage 3 : Combining unit plans to obtain query plans upto max-depth
@@ -317,11 +318,11 @@ class QueryPlanner:
         #  ----------------------------------------------------------------------------------------------------------  #
 
         #  Initialize the meta-plans from these unit plans
-        logger.info("Initializing meta-plans from unit-plans...")
+        logger.debug("Initializing meta-plans from unit-plans...")
         for transformation, unit_plan in q_planner._unit_plans.items():
             q_planner._meta_plans[transformation] = MetaQueryPlan.initialize_from_unit_plan(unit_plan.deepcopy()[0])
 
-        logger_color.info(f"Evolving meta query-plans upto a maximum length of "
+        logger_color.debug(f"Evolving meta query-plans upto a maximum length of "
                           f"<blue>{config.max_length}</blue>")
 
         #  Setup a mapping from the label of the output node of transformations
@@ -340,12 +341,12 @@ class QueryPlanner:
                 q_planner._evolve_meta_plan(unit, depth, nlabel_to_unit_plan)
 
             worklist = {plan for plan in q_planner._meta_plans.values() if depth in plan.blueprint}
-            logger_color.info(f"Found <green>{len(worklist)}</green> transformations in total "
+            logger_color.debug(f"Found <green>{len(worklist)}</green> transformations in total "
                               f"at depth <blue>{depth}</blue>.")
             if len(worklist) == 0:
                 break
 
-        logger_color.info(f"Found <green>{len(q_planner._meta_plans)}</green> transformations and meta "
+        logger_color.debug(f"Found <green>{len(q_planner._meta_plans)}</green> transformations and meta "
                           f"query plans in total with <blue>max_depth={config.max_length}</blue>.")
 
         #  TODO : Log the transformations to a file.
@@ -362,9 +363,9 @@ class QueryPlanner:
                     plan.blueprint_items[depth].update(items_list)
 
         #  Sequence tries help in quickly computing candidate sequences given a synthesis problem.
-        logger_color.info("Constructing Sequence Tries...")
+        logger_color.debug("Constructing Sequence Tries...")
         q_planner._compute_sequence_tries()
-        logger_color.info(f"Sequence Tries constructed for every depth.")
+        logger_color.debug(f"Sequence Tries constructed for every depth.")
 
         return q_planner
 

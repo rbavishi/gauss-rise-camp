@@ -41,7 +41,7 @@ class DeductionEngine:
     def build(cls, domain: SynthesisDomain, config: EngineConfig) -> 'DeductionEngine':
         #  First setup the witness set
         component_names = list(domain.get_available_components())
-        logger.opt(colors=True) .info(f"Building witness set using components <blue>{component_names}</blue>...")
+        logger.opt(colors=True).debug(f"Building witness set using components <blue>{component_names}</blue>...")
         entries: Dict[str, List[WitnessEntry]] = {}
 
         for component_name in component_names:
@@ -51,11 +51,11 @@ class DeductionEngine:
         witness_set = WitnessSet(entries=entries)
         logger.info(f"Finished building witness set.")
         for component_name, entries in witness_set.entries.items():
-            logger.opt(colors=True).info(f"Found <green>{len(entries)}</green> examples for "
-                                         f"component <blue>{component_name}</blue>")
+            logger.opt(colors=True).debug(f"Found <green>{len(entries)}</green> examples for "
+                                          f"component <blue>{component_name}</blue>")
 
         #  Now pre-compute query plans for all the possible unit queries using the witness set
-        logger.info(f"Initializing query planner...")
+        logger.debug(f"Initializing query planner...")
         query_planner = QueryPlanner.build(domain, config, witness_set)
         logger.info(f"Query planner initialized.")
 

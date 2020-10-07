@@ -16,6 +16,7 @@ class EngineConfig:
     of the synthesis engine.
     """
 
+    name: str = attr.ib()
     path: str = attr.ib(converter=os.path.abspath)
     min_length: int = attr.ib(default=1)
     max_length: int = attr.ib(default=1)

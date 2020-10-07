@@ -30,12 +30,16 @@ def create_pandas_lite_engine(num_examples_per_component: int = 50,
                               max_inputs: int = 1):
     domain = PandasLiteSynthesisDomain()
     name = 'pandas_lite'
-    cfg = EngineConfig(f"{config.PROJECT_DIR}/.saved_engines/{name}",
+    logger.info(f"Building engine for {name}.")
+
+    cfg = EngineConfig(name=name,
+                       path=f"{config.PROJECT_DIR}/.saved_engines/{name}",
                        num_examples_per_component=num_examples_per_component,
                        max_length=max_length,
                        max_inputs=max_inputs,
                        overwrite=True)
     engine = build_synthesis_engine(domain, cfg)
+    logger.info(f"Engine ready.")
 
     return engine
 

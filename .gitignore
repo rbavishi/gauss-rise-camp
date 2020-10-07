@@ -1,0 +1,15 @@
+/cmake-build-debug/
+/gauss/libs/libgauss.cpython-37m-darwin.so
+/.clion/
+*.swp
+*.swo
+*.pyc
+*.pyo
+*.DS_Store
+.idea
+*.egg-info
+scratch.py
+scratch.js
+*.log
+.saved_engines
+

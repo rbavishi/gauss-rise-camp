@@ -8,6 +8,8 @@ import colorama
 import tqdm
 from colorama import Fore as CF, Style as CS
 
+from gauss.utilities import logutils
+
 colorama.init()
 
 T = TypeVar("T")
@@ -17,6 +19,10 @@ def debug_iter(iterator: Iterable[T],
                *args,
                display_current: Optional[str] = None,
                position: int = None, **kwargs) -> Iterable[T]:
+    if logutils.get_stderr_level() not in ["TRACE", "DEBUG"]:
+        yield from iterator
+        return
+
     print(CF.MAGENTA, end='\r')
     kwargs.pop("dynamic_ncols", None)
     if display_current is not None:

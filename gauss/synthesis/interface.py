@@ -12,9 +12,9 @@ from gauss.utilities.logutils import logger
 @logger.catch(reraise=True)
 def build_synthesis_engine(domain: SynthesisDomain, config: EngineConfig):
     logger.add(f"{config.path}/logs/run.log", mode="w")
-    logger.opt(colors=True).info(f"Building synthesis engine for domain <green>{domain.__class__.__name__}</green>.")
-    logger.opt(colors=True).info(f"Data and logs will be saved at <green>{config.path}</green>.")
-    logger.opt(colors=True).info(f"Using engine configuration: <green>{config}</green>")
+    logger.opt(colors=True).debug(f"Building synthesis engine for domain <green>{domain.__class__.__name__}</green>.")
+    logger.opt(colors=True).debug(f"Data and logs will be saved at <green>{config.path}</green>.")
+    logger.opt(colors=True).debug(f"Using engine configuration: <green>{config}</green>")
 
     #  First build the deduction engine
     deduction_engine: DeductionEngine = DeductionEngine.build(domain, config)

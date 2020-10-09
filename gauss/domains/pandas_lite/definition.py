@@ -266,6 +266,7 @@ class PandasLiteSynthesisDomain(SynthesisDomain):
                           ('pd.groupby_transform',): 1,
                           ('pd.melt', 'pd.groupby_transform'): 1,
                           ('pd.melt', 'pd.groupby_agg'): 2,
+                          ('pd.mutate', 'pd.drop_columns'): 2,
                       }.get(tuple(x), 0))
 
 

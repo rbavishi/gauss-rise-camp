@@ -348,7 +348,7 @@ class PandasLiteSynthesisUI(SynthesisUI):
 
         string_ops = [
             {'name': "STR_JOIN(_)", "description": self.STRING_OPS["STR_JOIN(_)"]},
-            {'name': "STR_SPLIT", "description": self.STRING_OPS["STR_SPLIT"], "arity": 1},
+            {'name': "STR_SPLIT", "description": self.STRING_OPS["STR_SPLIT"]},
         ]
 
         return [
@@ -467,15 +467,16 @@ class PandasLiteSynthesisUI(SynthesisUI):
                 }
 
             else:
-                result = pd.Series([values[0]]).astype(str).str.split(r'[^A-Za-z0-9]+')[0]
+                results = pd.Series(values).astype(str).str.split(r'[^A-Za-z0-9]+')
 
                 result_traces = []
-                for idx, element in enumerate(result):
-                    result_traces.append([{
-                        "from": v_traces,
-                        "labels": ["STR_SPLIT"],
-                        "value": element
-                    }])
+                for result, v_trace in zip(results, v_traces):
+                    for idx, element in enumerate(result):
+                        result_traces.append([{
+                            "from": [v_trace],
+                            "labels": ["STR_SPLIT"],
+                            "value": element
+                        }])
 
                 return {
                     'traces': result_traces

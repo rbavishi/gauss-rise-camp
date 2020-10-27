@@ -29,3 +29,5 @@ If you are unable to launch an instance due to instance limits, try *one* of the
 Backup Link 1 - [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rbavishi/gauss-rise-camp-1/master?filepath=Gauss-AutoPandas-Tutorial.ipynb)
 
 Backup Link 2 - [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rbavishi/gauss-rise-camp-2/master?filepath=Gauss-AutoPandas-Tutorial.ipynb)
+
+**NOTE** - The backup links (and the corresponding repos) above will be removed after the tutorial (10/29/2020 12:45 PM - 2:00 PM PST) and are only intended to handle any unexpected surge.

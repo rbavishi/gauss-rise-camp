@@ -6,7 +6,7 @@ We provide both docker and in-browser options below. The in-browser option is po
 
 ### Instructions for Docker
 
-Download the image using the command below. Although the image is small (~400mb) it would be best to download this *before* the tutorial session.
+Download the image using the command below. Although the image is small (~400MB) it would be best to download this *before* the tutorial session.
 ```
 docker pull rbavishi/risecamp2020gauss:latest
 ```

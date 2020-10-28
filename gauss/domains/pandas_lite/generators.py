@@ -465,11 +465,12 @@ def gen_filtering_contains(df: pd.DataFrame, g_df: DataFrameGraph, constants: Li
 
 @generator(name='pd.melt', group='pandas', strategy=DfsGraphStrategy())
 def gen_melt(df: pd.DataFrame, g_df: DataFrameGraph, constants: List[Any], datagen: bool = False):
-    cands_id_vars = g_df.columns
-    id_vars = list(SubsetNode(cands_id_vars, uid="melt_id_vars", allow_empty=True))
+    cands_used_cols = g_df.columns
+    used_cols = set(SubsetNode(cands_used_cols, uid="melt_used_cols", allow_empty=False))
 
-    cands_value_vars = [c for c in g_df.columns if c.value not in id_vars]
-    value_vars = list(SubsetNode(cands_value_vars, uid="melt_value_vars"))
+    cands_id_vars = [c for c in g_df.columns if c.value in used_cols]
+    id_vars = list(SubsetNode(cands_id_vars, uid="melt_id_vars", allow_empty=True))
+    value_vars = [i for i in used_cols if i not in id_vars]
 
     var_name = FreshColumn(prefix='Var', uid="melt_var_name")
     value_name = FreshColumn(prefix='Value', uid="melt_value_name")
@@ -531,11 +532,11 @@ def gen_melt(df: pd.DataFrame, g_df: DataFrameGraph, constants: List[Any], datag
         else:
             tagged_edges.append(TaggedEdge(src=c_node, dst=c_node, tag="NOT_SELECTED@melt_id_vars"))
 
-    for c_node in cands_value_vars:
-        if c_node.value in value_vars:
-            tagged_edges.append(TaggedEdge(src=c_node, dst=c_node, tag="SELECTED@melt_value_vars"))
+    for c_node in cands_used_cols:
+        if c_node.value in used_cols:
+            tagged_edges.append(TaggedEdge(src=c_node, dst=c_node, tag="SELECTED@melt_used_cols"))
         else:
-            tagged_edges.append(TaggedEdge(src=c_node, dst=c_node, tag="NOT_SELECTED@melt_value_vars"))
+            tagged_edges.append(TaggedEdge(src=c_node, dst=c_node, tag="NOT_SELECTED@melt_used_cols"))
 
     graph.add_tagged_edges(tagged_edges)
     return result, call_str, graph, g_res

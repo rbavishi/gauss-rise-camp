@@ -644,8 +644,11 @@ def _generate_computation_node(interaction: Dict, graph: GraphPandas, g_inputs: 
 
     from_nodes = [_generate_computation_node(t, graph, g_inputs) for t in interaction['from']]
     interm_node = graph.create_intermediate_node(interaction['value'])
+    labels = interaction['labels']
+    if len(labels) == 1 and len(from_nodes) > 1:
+        labels = [labels[0]] * len(from_nodes)
 
-    for label, node in zip(interaction['labels'], from_nodes):
+    for label, node in zip(labels, from_nodes):
         graph.add_edge(Edge(node, interm_node, getattr(ELabel, label)))
 
     return interm_node

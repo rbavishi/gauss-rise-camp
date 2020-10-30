@@ -23,11 +23,3 @@ Now visit `localhost:8889` in a browser to access the server. Note that if you w
 Click on the link below to launch a binder instance.
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rbavishi/gauss-rise-camp/master?filepath=Gauss-AutoPandas-Tutorial.ipynb)
-
-If you are unable to launch an instance due to instance limits, try *one* of the backup links below - 
-
-Backup Link 1 - [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rbavishi/gauss-rise-camp-1/master?filepath=Gauss-AutoPandas-Tutorial.ipynb)
-
-Backup Link 2 - [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rbavishi/gauss-rise-camp-2/master?filepath=Gauss-AutoPandas-Tutorial.ipynb)
-
-**NOTE** - The backup links (and the corresponding repos) above will be removed after the tutorial (10/29/2020 12:45 PM - 2:00 PM PST) and are only intended to handle any unexpected surge.

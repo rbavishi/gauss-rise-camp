@@ -2,11 +2,10 @@
 
 We provide both docker and in-browser options below. The in-browser option is powered by the excellent infrastructure provided by MyBinder (https://mybinder.org).
 
-**IMPORTANT** : If you have docker installed and are able to download images and run containers using the shell commands below, please use the docker option. Binder only allows 100 users concurrently and hence is only intended to be a backup for people who do not have docker installed or on a system such as Windows with limited Docker support.
 
 ### Instructions for Docker
 
-Download the image using the command below. Although the image is small (~400MB) it would be best to download this *before* the tutorial session.
+Download the image using the command below. 
 ```
 docker pull rbavishi/risecamp2020gauss:latest
 ```
